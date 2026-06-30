@@ -29,15 +29,16 @@ public class ProdutosDAO {
         try {
             String sql = "INSERT INTO PRODUTOS (nome, valor, status) VALUES (?, ?, ?)";
             prep = conn.prepareStatement(sql);
+            
             prep.setString(1, produto.getNome());
             prep.setInt(2, produto.getValor());
             prep.setString(3, "A Venda");
             
-            resultset = prep.executeQuery();
+            prep.executeUpdate();
             
             prep.close();
         } catch (SQLException e) {
-            
+            System.out.println(e.getMessage());
         }
     }
     
