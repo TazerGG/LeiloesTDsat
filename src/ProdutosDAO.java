@@ -26,7 +26,8 @@ public class ProdutosDAO {
     ArrayList<ProdutosDTO> listagem = new ArrayList<>();
     
     public void cadastrarProduto (ProdutosDTO produto){
-        try {
+        conn = new conectaDAO().connectDB();
+        try {        
             String sql = "INSERT INTO PRODUTOS (nome, valor, status) VALUES (?, ?, ?)";
             prep = conn.prepareStatement(sql);
             
@@ -45,6 +46,7 @@ public class ProdutosDAO {
     }
     
     public void venderProduto(int id) {
+        conn = new conectaDAO().connectDB();
         try {
             String sql = "UPDATE PRODUTOS SET status = 'Vendido' WHERE id = ?";
             prep = conn.prepareStatement(sql);
