@@ -26,8 +26,6 @@ public class ProdutosDAO {
     ArrayList<ProdutosDTO> listagem = new ArrayList<>();
     
     public void cadastrarProduto (ProdutosDTO produto){
-        
-        
         try {
             String sql = "INSERT INTO PRODUTOS (nome, valor, status) VALUES (?, ?, ?)";
             prep = conn.prepareStatement(sql);
@@ -41,6 +39,20 @@ public class ProdutosDAO {
             prep.close();
             
             JOptionPane.showMessageDialog(null, "Produto: " + produto.getNome() + ". Cadastrado com sucesso.");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public void venderProduto(int id) {
+        try {
+            String sql = "UPDATE PRODUTOS SET status = 'Vendido' WHERE id = ?";
+            prep = conn.prepareStatement(sql);
+            
+            prep.setInt(1, id);
+            
+            prep.executeUpdate();
+            prep.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
