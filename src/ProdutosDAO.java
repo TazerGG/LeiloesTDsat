@@ -26,9 +26,8 @@ public class ProdutosDAO {
     ArrayList<ProdutosDTO> listagem = new ArrayList<>();
     
     public void cadastrarProduto (ProdutosDTO produto){
-        
-        
-        try {
+        conn = new conectaDAO().connectDB();
+        try {        
             String sql = "INSERT INTO PRODUTOS (nome, valor, status) VALUES (?, ?, ?)";
             prep = conn.prepareStatement(sql);
             
@@ -46,11 +45,53 @@ public class ProdutosDAO {
         }
     }
     
+    public void venderProduto(int id) {
+        conn = new conectaDAO().connectDB();
+        try {
+            String sql = "UPDATE PRODUTOS SET status = 'Vendido' WHERE id = ?";
+            prep = conn.prepareStatement(sql);
+            
+            prep.setInt(1, id);
+            
+            prep.executeUpdate();
+            prep.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
     public ArrayList<ProdutosDTO> listarProdutos(){
         conn = new conectaDAO().connectDB();
         
         try {
             String sql = "SELECT * FROM PRODUTOS";
+            Statement stm = conn.createStatement();
+            resultset = stm.executeQuery(sql);
+            
+            while (resultset.next()) {
+                ProdutosDTO produto = new ProdutosDTO();
+                produto.setId(resultset.getInt("id"));
+                produto.setNome(resultset.getString("nome"));
+                produto.setValor(resultset.getInt("valor"));
+                produto.setStatus(resultset.getString("status"));
+                
+                listagem.add(produto);
+            }
+            
+            resultset.close();
+            stm.close();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        
+        return listagem;
+    }
+    
+    public ArrayList<ProdutosDTO> listarProdutosVendidos(){
+        conn = new conectaDAO().connectDB();
+        
+        try {
+            String sql = "SELECT * FROM PRODUTOS WHERE status = 'Vendido'";
             Statement stm = conn.createStatement();
             resultset = stm.executeQuery(sql);
             
